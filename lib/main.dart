@@ -2,39 +2,41 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mynotes/application/application_repository/app_repository.dart';
-import 'package:mynotes/application/blocs/app_bloc.dart';
-import 'package:mynotes/auth/auth_repository.dart';
-import 'package:mynotes/auth/login/data_provide/dataprovider.dart';
-import 'package:mynotes/auth/login/login_bloc.dart';
-import 'package:mynotes/post/blocs/post_bloc.dart';
-import 'package:mynotes/post/blocs/post_state.dart';
-import 'package:mynotes/post/data_provider/post_data_provider.dart';
-import 'package:mynotes/post/post_repository/post_repository.dart';
-import 'package:mynotes/user/blocs/user_bloc.dart';
-import 'package:mynotes/user/data_provider/user_data_provider.dart';
-import 'package:mynotes/user/repository/user_repository.dart';
-import 'package:mynotes/views/application_form.dart';
-import 'package:mynotes/views/companies_post.dart';
-import 'package:mynotes/views/company_registration.dart';
-import 'package:mynotes/views/companylogin.dart';
-import 'package:mynotes/views/login.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mynotes/views/user_registration.dart';
-import 'application/dataprovider/app_provider.dart';
-import 'company/blocs/company_bloc.dart';
-import 'company/data_provider/company_data_provider.dart';
-import 'company/repository/company_repository.dart';
-import 'models/companies_post.dart';
-import 'views/Company_message.dart';
-import 'views/Usermessage.dart';
-import 'views/company_navigation.dart';
-import 'views/company_post.dart';
-import 'views/company_profile.dart';
-import 'views/postform.dart';
-import 'views/reject_or_accept_application.dart';
-import 'views/user_navigation.dart';
-import 'views/user_profile.dart';
+import 'package:mynotes/presentation/views/app/application_form.dart';
+import 'package:mynotes/presentation/views/auth/companylogin.dart';
+import 'package:mynotes/presentation/views/auth/login.dart';
+import 'package:mynotes/presentation/views/company/Company_message.dart';
+import 'package:mynotes/presentation/views/company/companies_post.dart';
+import 'package:mynotes/presentation/views/company/company_navigation.dart';
+import 'package:mynotes/presentation/views/company/company_post.dart';
+import 'package:mynotes/presentation/views/company/company_profile.dart';
+import 'package:mynotes/presentation/views/company/company_registration.dart';
+import 'package:mynotes/presentation/views/message/Usermessage.dart';
+import 'package:mynotes/presentation/views/message/reject_or_accept_application.dart';
+import 'package:mynotes/presentation/views/post/postform.dart';
+import 'package:mynotes/presentation/views/user/user_navigation.dart';
+import 'package:mynotes/presentation/views/user/user_profile.dart';
+import 'package:mynotes/presentation/views/user/user_registration.dart';
+
+import 'Application/app/blocs/app_bloc.dart';
+import 'Application/auth/login_bloc.dart';
+import 'Application/company/blocs/company_bloc.dart';
+import 'Application/message/blocs/app_bloc.dart';
+import 'Application/post/blocs/post_bloc.dart';
+import 'Application/user/blocs/user_bloc.dart';
+import 'infrastructure/application/application_repository/app_repository.dart';
+import 'infrastructure/application/dataprovider/app_provider.dart';
+import 'infrastructure/auth/auth_repository.dart';
+import 'infrastructure/auth/dataprovider.dart';
+import 'infrastructure/company/data_provider/company_data_provider.dart';
+import 'infrastructure/company/repository/company_repository.dart';
+import 'infrastructure/message/application_repository/app_repository.dart';
+import 'infrastructure/message/dataprovider/app_provider.dart';
+import 'infrastructure/post/data_provider/post_data_provider.dart';
+import 'infrastructure/post/post_repository/post_repository.dart';
+import 'infrastructure/user/data_provider/user_data_provider.dart';
+import 'infrastructure/user/repository/user_repository.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -42,10 +44,11 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: RepositoryProvider(
-      create: (context) => AuthenticationRepository(Loginprovider()),
-      child: const CompaniesPost(),
-    ));
+          create: (context) => AuthenticationRepository(Loginprovider()),
+          child: const CompaniesPost(),
+        ));
   }
 }
 
@@ -135,6 +138,10 @@ void main() {
       BlocProvider<UserBloc>(
         create: (context) =>
             UserBloc(userRepository: UserRepository(UserDataProvider())),
+      ),
+      BlocProvider<MessageBloc>(
+        create: (context) => MessageBloc(
+            appRepository: MessageRepository(MessageDataProvider())),
       )
     ],
     child: MaterialApp.router(
